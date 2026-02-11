@@ -1,0 +1,5 @@
+{
+  "name": "cite-guard",
+  "version": "1.0.0",
+  "description": "Cite-Guard: Hallucination-resistant citation & claim grounding pipeline for LaTeX/BibTeX AI/CS + policy papers."
+}

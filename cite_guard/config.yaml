@@ -1,0 +1,63 @@
+paper_tex: "./papers/main.tex"
+bib_file: "./papers/refs.bib"
+out_dir: "./out"
+
+venue_profile: "policy_generic"   # policy_generic|jcp|ipr
+ml_profile: "neurips"             # neurips|icml|iclr|ml_generic
+
+stages: ["init","audit","resolve","ground","venue","ml","review_critiques"]
+
+evidence_preference: ["md","html","htm","tex","rtf","txt","pdf"]
+ground_fetch_enabled: true
+http_timeout_sec: 25
+http_max_bytes: 15000000   # 15 MB per artifact
+user_agent: "cite-guard/1.0 (+internal-lab-qa)"
+
+weights:
+  audit: 1.0
+  resolve: 1.0
+  ground: 1.0
+  venue: 1.0
+  ml: 1.0
+
+confidence_weighting: "linear"  # equal|linear|quadratic
+
+audit_penalties:
+  missing_title: 30
+  missing_authors: 30
+  missing_year: 20
+  missing_venue: 15
+  malformed_bibtex: 10
+  unused_reference: 10
+  placeholder_field: 10
+
+resolve_thresholds:
+  title_similarity_pass: 0.92
+  author_overlap_pass: 0.70
+  year_diff_pass: 1
+  title_similarity_review: 0.86
+  author_overlap_review: 0.55
+  max_candidates: 3
+
+grounding:
+  supported_threshold: 0.75
+  weak_threshold: 0.60
+  sota_keywords: ["state-of-the-art","sota","outperforms","achieves","best","surpasses","beats","new state of the art"]
+  strong_claim_verbs: ["demonstrates","proves","guarantees","eliminates","solves","achieves"]
+  negation_tokens: ["not","no","never","fails","cannot","can't","doesn't","didn't","without"]
+
+review:
+  default_blockers:
+    - "resolve_unresolved_or_low_confidence"
+  profiles:
+    neurips:
+      blockers:
+        - "high_priority_claim_unsupported"
+        - "sota_claim_with_unresolved_or_low_conf_ref"
+        - "year_or_venue_mismatch_after_resolve"
+
+priority_thresholds:
+  blocker_resolve_quality_lt: 40
+  blocker_resolve_confidence_lt: 50
+  high_ground_quality_lt: 50
+  medium_venue_quality_lt: 60
